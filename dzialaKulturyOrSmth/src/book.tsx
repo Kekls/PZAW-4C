@@ -1,4 +1,4 @@
-interface Props{
+export interface Props{
     tytul: string;
     rok: number;
     autor: string
@@ -7,13 +7,14 @@ interface Props{
 
 function Book({tytul, rok, autor, plakat}: Props){
     return(
-    <div>
-        <img src={plakat}/>
-        <p>{autor}</p>
-        <br></br>
-        <p>{tytul}</p>
-        <br></br>
-        <p>{rok}</p>  
+    <div className="card">
+        <img src={plakat} className="card-img-top"/>
+        <div className="card-body">
+            <p className="card-title">{tytul}</p>
+            <p className="card-text">{autor}</p>
+            <p className="card-text">{rok} {rok < 2000 && ", klasyka"}</p>
+            <br />
+        </div>
     </div>
     );
 }

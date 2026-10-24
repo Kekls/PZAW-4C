@@ -1,16 +1,21 @@
-interface Props{
+export interface Props{
     tytul: string;
     rok: number;
-    plakat: string;    
+    plakat: string;
+    rating: number;
 }
 
-function Movie({tytul, rok, plakat}: Props){
+function Movie({tytul, rok, plakat, rating}: Props){
     return(
-    <div>
-        <img src={plakat}/>
-        <p>{tytul}</p>
-        <br></br>
-        <p>{rok}</p>  
+    <div className="card">
+        <img src={plakat} className="card-img-top"/>
+        <div className="card-body">
+
+            <p className="card-title">{tytul}</p>
+            <p className="card-text">{rok}</p>
+            <p className="card-text">rating: {rating}/10 {rating >= 8 && ", polecany"}</p>
+            <br />
+        </div>
     </div>
     );
 }
