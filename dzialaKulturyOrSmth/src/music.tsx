@@ -7,6 +7,10 @@ export interface Props{
     listaUtworow: [string, string][];
 }
 
+function handleSongClick(tytulLU: string, tytul: string){
+    console.log(`Wybrano utwór: ${tytulLU} z albumu ${tytul}`);
+}
+
 function Music({tytul, rok, autor, plakat, gatunek, listaUtworow}: Props){
     return(
     <div className="card">
@@ -19,9 +23,9 @@ function Music({tytul, rok, autor, plakat, gatunek, listaUtworow}: Props){
             {listaUtworow.length > 0 ? (
                 <table className="table table-striped table-hover">
                     <tbody>
-                        {listaUtworow.map(([tytul, czas], index) => (
-                            <tr key={index}>
-                                <td><strong>{tytul}</strong></td>
+                        {listaUtworow.map(([tytulLU, czas], index) => (
+                            <tr key={index} onClick={() => handleSongClick(tytulLU, tytul)}>
+                                <td><strong>{tytulLU}</strong></td>
                                 <td>{czas}</td>
                             </tr>
                         ))}
