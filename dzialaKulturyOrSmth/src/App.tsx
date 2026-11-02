@@ -62,6 +62,7 @@ function App() {
           const searchValue = event.target.value;
 
           setMovieSearch(searchValue);
+          console.log(searchValue);
 
           setFilteredMovies(
             movies.filter((movie) =>
@@ -136,6 +137,7 @@ function App() {
         value={bookSearch}
         onChange={(event) => {
           setBookSearch(event.target.value);
+          console.log(event.target.value);
         }}
       />
 
@@ -147,9 +149,6 @@ function App() {
         <div>
           <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
             {[...books]
-              .filter((book) =>
-                book.tytul.toLowerCase().includes(bookSearch.toLowerCase())
-              )
               .sort((a, b) => a.tytul.localeCompare(b.tytul))
               .map((book, key) => (
                 <div className="col" key={key}>
@@ -199,6 +198,7 @@ function App() {
         value={musicSearch}
         onChange={(event) => {
           setMusicSearch(event.target.value);
+          console.log(event.target.value);
         }}
       />
 
@@ -210,9 +210,6 @@ function App() {
         <div>
           <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
             {[...musics]
-              .filter((music) =>
-                music.tytul.toLowerCase().includes(musicSearch.toLowerCase())
-              )
               .sort((a, b) => a.tytul.localeCompare(b.tytul))
               .map((music, key) => (
                 <div className="col" key={key}>
