@@ -28,85 +28,227 @@ const musics: musicProps[] = [
         listaUtworow:[["Over the Wall", "4:07"], ["The Haunting", "4:11"], ["Burnt Offerings", "5:07"], ["First Strike Is Deadly", "3:43"]]}
 ];
 
-function App(){
-  const mostTunes = [...musics].sort((a,b) => b.listaUtworow.length - a.listaUtworow.length)[0];
+function App() {
+  const mostTunes = [...musics].sort(
+    (a, b) => b.listaUtworow.length - a.listaUtworow.length
+  )[0];
 
   const [movieIsOpen, setMovieOpen] = useState(true);
   const [bookIsOpen, setBookOpen] = useState(true);
   const [musicIsOpen, setMusicOpen] = useState(true);
 
-  return(
+  const [movieSearch, setMovieSearch] = useState('');
+  const [bookSearch, setBookSearch] = useState('');
+  const [musicSearch, setMusicSearch] = useState('');
+
+  const [filteredMovies, setFilteredMovies] = useState<movieProps[]>(movies);
+
+  return (
     <div className="container">
-      <h1 onClick={() => setMovieOpen(!movieIsOpen)} className="text-black">Filmy</h1>
-      {movieIsOpen && ( <div><div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">{
-        [...movies]
-        .sort((a,b) => a.tytul.localeCompare(b.tytul))
-        .map((movie, key) => (
-          <div className="col" key={key}>
-            <Movie tytul={movie.tytul} rok={movie.rok} plakat={movie.plakat} rating={movie.rating} key={key}/>
+
+      <h1
+        onClick={() => setMovieOpen(!movieIsOpen)}
+        className="text-black"
+      >
+        Filmy
+      </h1>
+
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Wpisz tytuł..."
+        value={movieSearch}
+        onChange={(event) => {
+          const searchValue = event.target.value;
+
+          setMovieSearch(searchValue);
+
+          setFilteredMovies(
+            movies.filter((movie) =>
+              movie.tytul.toLowerCase().includes(searchValue.toLowerCase())
+            )
+          );
+        }}
+      />
+
+      <p className="lead text-secondary">
+        szukana fraza: {movieSearch}
+      </p>
+
+      {movieIsOpen && (
+        <div>
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            {filteredMovies.length > 0 ? (
+              [...filteredMovies]
+                .sort((a, b) => a.tytul.localeCompare(b.tytul))
+                .map((movie, key) => (
+                  <div className="col" key={key}>
+                    <Movie
+                      tytul={movie.tytul}
+                      rok={movie.rok}
+                      plakat={movie.plakat}
+                      rating={movie.rating}
+                    />
+                  </div>
+                ))
+            ) : (
+              <div className="col">
+                <p className="lead text-primary">
+                  Nie znaleziono filmów
+                </p>
+              </div>
+            )}
           </div>
-        ))}
         </div>
+      )}
 
-        <h2 className="text-black">Filmy wydane po 2010 roku</h2>
+      <h2 className="text-black">
+        Filmy wydane po 2010 roku
+      </h2>
 
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3"> 
+      <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
         {movies
-        .filter((n) => n.rok > 2010)
-        .map((movie, key) => (
-          <div className="col" key={key}>
-            <Movie tytul={movie.tytul} rok={movie.rok} plakat={movie.plakat} rating={movie.rating} key={key}/>
-          </div>
-        ))}
-        </div></div>
-      )}
-      
-
-      <h1 onClick={() => setBookOpen(!bookIsOpen)} className="text-black">Ksiazki</h1>
-      {bookIsOpen && ( <div><div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3"> {
-        [...books]
-        .sort((a,b)=> a.tytul.localeCompare(b.tytul))
-        .map((book, key) => (
-          <div className="col" key={key}>
-            <Book tytul={book.tytul} rok={book.rok} autor={book.autor} plakat={book.plakat} key={key}/>
-          </div>
-        ))}
+          .filter((movie) => movie.rok > 2010)
+          .map((movie, key) => (
+            <div className="col" key={key}>
+              <Movie
+                tytul={movie.tytul}
+                rok={movie.rok}
+                plakat={movie.plakat}
+                rating={movie.rating}
+              />
+            </div>
+          ))}
       </div>
-      <h2 className="text-black">Ksiazki posortowane po roku wydania</h2>
 
-        <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3"> 
-        {[...books]
-        .sort((a,b)=> b.rok - a.rok)
-        .map((book, key) => (
-          <div className="col" key={key}> 
-            <Book tytul={book.tytul} rok={book.rok} autor={book.autor} plakat={book.plakat} key={key}/>
+
+      <h1
+        onClick={() => setBookOpen(!bookIsOpen)}
+        className="text-black"
+      >
+        Książki
+      </h1>
+
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Wpisz tytuł"
+        value={bookSearch}
+        onChange={(event) => {
+          setBookSearch(event.target.value);
+        }}
+      />
+
+      <p className="lead text-secondary">
+        Wyszukana fraza: {bookSearch}
+      </p>
+
+      {bookIsOpen && (
+        <div>
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            {[...books]
+              .filter((book) =>
+                book.tytul.toLowerCase().includes(bookSearch.toLowerCase())
+              )
+              .sort((a, b) => a.tytul.localeCompare(b.tytul))
+              .map((book, key) => (
+                <div className="col" key={key}>
+                  <Book
+                    tytul={book.tytul}
+                    rok={book.rok}
+                    autor={book.autor}
+                    plakat={book.plakat}
+                  />
+                </div>
+              ))}
           </div>
-        ))}
-        </div></div>
+
+          <h2 className="text-black">
+            Książki posortowane po roku wydania
+          </h2>
+
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            {[...books]
+              .sort((a, b) => b.rok - a.rok)
+              .map((book, key) => (
+                <div className="col" key={key}>
+                  <Book
+                    tytul={book.tytul}
+                    rok={book.rok}
+                    autor={book.autor}
+                    plakat={book.plakat}
+                  />
+                </div>
+              ))}
+          </div>
+        </div>
       )}
-      
-      <h1 onClick={() => setMusicOpen(!musicIsOpen)} className="text-black">Albumy Muzyczne</h1>
-     {musicIsOpen && (
-  <div>
-    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-      {[...musics]
-        .sort((a, b) => a.tytul.localeCompare(b.tytul))
-        .map((music, key) => (
-          <div className="col" key={key}>
-            <Music tytul={music.tytul} rok={music.rok} autor={music.autor} plakat={music.plakat} gatunek={music.gatunek} listaUtworow={music.listaUtworow} />
+
+
+      <h1
+        onClick={() => setMusicOpen(!musicIsOpen)}
+        className="text-black"
+      >
+        Albumy Muzyczne
+      </h1>
+
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Wpisz tytuł"
+        value={musicSearch}
+        onChange={(event) => {
+          setMusicSearch(event.target.value);
+        }}
+      />
+
+      <p className="lead text-secondary">
+        Wyszukana fraza: {musicSearch}
+      </p>
+
+      {musicIsOpen && (
+        <div>
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            {[...musics]
+              .filter((music) =>
+                music.tytul.toLowerCase().includes(musicSearch.toLowerCase())
+              )
+              .sort((a, b) => a.tytul.localeCompare(b.tytul))
+              .map((music, key) => (
+                <div className="col" key={key}>
+                  <Music
+                    tytul={music.tytul}
+                    rok={music.rok}
+                    autor={music.autor}
+                    plakat={music.plakat}
+                    gatunek={music.gatunek}
+                    listaUtworow={music.listaUtworow}
+                  />
+                </div>
+              ))}
           </div>
-        ))}
-    </div>
 
-    <h2 className="text-black">Album muzyczny z największą liczbą utworów</h2>
+          <h2 className="text-black">
+            Album muzyczny z największą liczbą utworów
+          </h2>
 
-    <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
-      <div className="col">
-        <Music tytul={mostTunes.tytul} rok={mostTunes.rok} autor={mostTunes.autor} plakat={mostTunes.plakat} gatunek={mostTunes.gatunek} listaUtworow={mostTunes.listaUtworow} />
-      </div>
-    </div>
-  </div>
-)}
+          <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-3">
+            {mostTunes && (
+              <div className="col">
+                <Music
+                  tytul={mostTunes.tytul}
+                  rok={mostTunes.rok}
+                  autor={mostTunes.autor}
+                  plakat={mostTunes.plakat}
+                  gatunek={mostTunes.gatunek}
+                  listaUtworow={mostTunes.listaUtworow}
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
